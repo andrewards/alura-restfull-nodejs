@@ -1,0 +1,26 @@
+{
+  "name": "api-restfull-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewards/alura-restfull-nodejs.git"
+  },
+  "keywords": [],
+  "author": "&Rewards",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewards/alura-restfull-nodejs/issues"
+  },
+  "homepage": "https://github.com/andrewards/alura-restfull-nodejs#readme",
+  "dependencies": {
+    "config": "^3.3.6",
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.5"
+  }
+}
