@@ -7,4 +7,15 @@ module.exports = {
     read() {
         return modelTable.findAll();
     },
+    async searchForID(id) {
+        const encontrado = await modelTable.findOne({
+            where: { id }
+        });
+
+        if (!encontrado) {
+            throw new Error('Fornecedor não encontrado!');
+        }
+
+        return encontrado;
+    }
 }
