@@ -14,6 +14,7 @@ Router.post('/', async (req, res) => {
         res.send(JSON.stringify(fornecedor));
     } catch(err) {
 
+        res.status(400);
         res.send(JSON.stringify({
             erros: JSON.parse(err.message),
         }));
@@ -39,6 +40,7 @@ Router.get('/:idFornecedor', async (req, res) => {
         res.send(JSON.stringify(fornecedor));
     } catch(err) {
 
+        res.status(404);
         res.send(JSON.stringify({
             mensagem: err.message
         }));
@@ -66,6 +68,9 @@ Router.patch('/:idFornecedor', async (req, res) => {
         res.end();
     } catch(err) {
 
+        res.status(400);
+        if (err.message === 'Fornecedor não encontrado!') res.status(404); 
+
         res.send(JSON.stringify({
             mensagem: err.message,
         }));
@@ -84,6 +89,7 @@ Router.delete('/:idFornecedor', async (req, res) => {
         res.end();
     } catch(err) {
 
+        res.status(404);
         res.send(JSON.stringify({
             mensagem: err.message,
         }));
