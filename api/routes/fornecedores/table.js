@@ -17,5 +17,13 @@ module.exports = {
         }
 
         return encontrado;
+    },
+    update(id, dadosParaAtualizar) {
+        return modelTable.update(
+            dadosParaAtualizar,
+            {
+                where: { id }
+            }
+        );
     }
 }

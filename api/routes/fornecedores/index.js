@@ -29,4 +29,28 @@ Router.get('/:idFornecedor', async (req, res) => {
 
 });
 
+Router.patch('/:idFornecedor', async (req, res) => {
+    
+    try {
+
+        const id = req.params.idFornecedor;
+        const dadosRecebidos = req.body;
+    
+        //const dados = Object.assign({}, dadosRecebidos, {id});
+        const dados = {
+            id,
+            ...dadosRecebidos,
+        }
+    
+        const fornecedor = new Fornecedor(dados);
+        await fornecedor.update();
+        res.end();
+        
+    } catch(err) {
+        res.status(400).send(JSON.stringify({
+            mensagem: err.message
+        }));
+    }
+});
+
 module.exports = Router;
