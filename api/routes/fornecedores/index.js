@@ -9,10 +9,12 @@ Router.post('/', async (req, res) => {
         const dadosRecebidos = req.body;
         const fornecedor = new Fornecedor(dadosRecebidos);
         await fornecedor.create();
-        res.send(JSON.stringify(fornecedor));
 
+        res.status(201);
+        res.send(JSON.stringify(fornecedor));
     } catch(err) {
-        res.status(400).send(JSON.stringify({
+
+        res.send(JSON.stringify({
             erros: JSON.parse(err.message),
         }));
     }
@@ -21,6 +23,8 @@ Router.post('/', async (req, res) => {
 
 Router.get('/', async (req, res) => {
     const resultados = await table.read();
+
+    res.status(200);
     res.send(JSON.stringify(resultados));
 });
 
@@ -30,9 +34,12 @@ Router.get('/:idFornecedor', async (req, res) => {
         const id = req.params.idFornecedor;
         const fornecedor = new Fornecedor({ id });
         await fornecedor.searchForID();
+
+        res.status(200);
         res.send(JSON.stringify(fornecedor));
     } catch(err) {
-        res.status(404).send(JSON.stringify({
+
+        res.send(JSON.stringify({
             mensagem: err.message
         }));
     }
@@ -54,10 +61,12 @@ Router.patch('/:idFornecedor', async (req, res) => {
     
         const fornecedor = new Fornecedor(dados);
         await fornecedor.update();
+
+        res.status(204);
         res.end();
-        
     } catch(err) {
-        res.status(400).send(JSON.stringify({
+
+        res.send(JSON.stringify({
             mensagem: err.message,
         }));
     }
@@ -66,13 +75,16 @@ Router.patch('/:idFornecedor', async (req, res) => {
 Router.delete('/:idFornecedor', async (req, res) => {
     
     try {
+
         const id = req.params.idFornecedor;
         const fornecedor = new Fornecedor({id});
         await fornecedor.delete();
-        res.end();
 
+        res.status(204);
+        res.end();
     } catch(err) {
-        res.status(404).send(JSON.stringify({
+
+        res.send(JSON.stringify({
             mensagem: err.message,
         }));
     }
