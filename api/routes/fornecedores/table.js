@@ -1,4 +1,5 @@
 const modelTable = require('./modelTabel');
+const NotFound = require('../../erros/NotFound');
 
 module.exports = {
     create(fornecedor) {        
@@ -13,7 +14,7 @@ module.exports = {
         });
 
         if (!encontrado) {
-            throw new Error('Fornecedor não encontrado!');
+            throw new NotFound();
         }
 
         return encontrado;

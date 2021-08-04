@@ -1,6 +1,7 @@
 const Router = require('express').Router();
 const table = require('./table');
 const Fornecedor = require('./fornecedor');
+const NotFound = require('../../erros/NotFound');
 
 Router.post('/', async (req, res) => {
     
@@ -48,7 +49,7 @@ Router.get('/:idFornecedor', async (req, res) => {
 
 });
 
-Router.patch('/:idFornecedor', async (req, res) => {
+Router.patch('/:idFornecedor', async (req, res, next) => {
     
     try {
 
@@ -67,13 +68,7 @@ Router.patch('/:idFornecedor', async (req, res) => {
         res.status(204);
         res.end();
     } catch(err) {
-
-        res.status(400);
-        if (err.message === 'Fornecedor não encontrado!') res.status(404); 
-
-        res.send(JSON.stringify({
-            mensagem: err.message,
-        }));
+        next(err);
     }
 });
 
