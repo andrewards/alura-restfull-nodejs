@@ -25,5 +25,10 @@ module.exports = {
                 where: { id }
             }
         );
+    },
+    delete(id) {
+        return modelTable.destroy({
+            where: { id },
+        });
     }
 }

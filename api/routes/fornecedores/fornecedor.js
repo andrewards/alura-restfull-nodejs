@@ -21,6 +21,7 @@ class Fornecedor {
     }
 
     async create() {
+        await this.validar();
 
         const result = await table.create({
             empresa: this.empresa,
@@ -32,7 +33,6 @@ class Fornecedor {
         this.dataCriacao = result.dataCriacao;
         this.dataAtualizacao = result.dataAtualizacao;
         this.versao = result.versao;
-
     }
 
     async searchForID() {
@@ -63,6 +63,46 @@ class Fornecedor {
         }
 
         await table.update(this.id, dadosParaAtualizar);
+    }
+
+    async delete() {
+        await table.searchForID(this.id);
+        await table.delete(this.id);
+    }
+
+    async validar() {
+        const campos = ['empresa', 'email', 'categoria'];
+
+        const erros = [];
+        const tiposDeErros = [
+            'Campo não informado!',
+            'Campo inválido!',
+            'Campo vazio!',
+        ]
+
+        campos.forEach(campo => {
+            const valor = this[campo];
+            if (valor === undefined) {
+                erros.push({
+                    campo,
+                    tipo: tiposDeErros[0] 
+                });
+            } else if (typeof valor !== 'string') {
+                erros.push({
+                    campo,
+                    tipo: tiposDeErros[1] 
+                });
+            } else if (valor.length === 0) {
+                erros.push({
+                    campo,
+                    tipo: tiposDeErros[2] 
+                });
+            }
+        });
+
+        if (erros.length > 0) {
+            throw new Error(JSON.stringify(erros));
+        }
     }
 
 }
