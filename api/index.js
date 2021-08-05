@@ -2,6 +2,8 @@ const express = require('express');
 const config = require('config');
 const Router = require('./routes/fornecedores');
 const NotFound = require('./erros/NotFound');
+const InvalidField = require('./erros/InvalidField');
+const NotFoundData = require('./erros/NotFoundData');
 
 const app = express();
 app.use(express.json());
@@ -9,15 +11,20 @@ app.use(express.json());
 app.use('/api/fornecedores', Router);
 
 app.use((err, req, res, next) => {
+
+    let status = 500;
     if (err instanceof NotFound) {
-        res.status(404);
-    } else {
-        res.status(400);
+        status = 404;
+    } else if (err instanceof InvalidField
+        || err instanceof NotFoundData) {
+        status = 400;
     }
 
+    res.status(status);
+
     res.send(JSON.stringify({
-        mensagem: err.message,
-        id: err.idErro,
+        erro: err.message,
+        code: err.idErro,
     }));
     
 });

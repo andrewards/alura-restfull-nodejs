@@ -1,4 +1,6 @@
 const table = require('./table');
+const InvalidField = require('../../erros/InvalidField');
+const NotFoundData = require('../../erros/NotFoundData');
 
 class Fornecedor {
 
@@ -59,7 +61,7 @@ class Fornecedor {
         });
 
         if (Object.keys(dadosParaAtualizar).length === 0) {
-            throw new Error('Não foram fornecidos dados para atualizar!');
+            throw new NotFoundData('Não foram fornecidos dados para atualizar!');
         }
 
         await table.update(this.id, dadosParaAtualizar);
@@ -74,35 +76,17 @@ class Fornecedor {
         const campos = ['empresa', 'email', 'categoria'];
 
         const erros = [];
-        const tiposDeErros = [
-            'Campo não informado!',
-            'Campo inválido!',
-            'Campo vazio!',
-        ]
 
         campos.forEach(campo => {
             const valor = this[campo];
             if (valor === undefined) {
-                erros.push({
-                    campo,
-                    tipo: tiposDeErros[0] 
-                });
-            } else if (typeof valor !== 'string') {
-                erros.push({
-                    campo,
-                    tipo: tiposDeErros[1] 
-                });
+                throw new InvalidField(campo, 0);
             } else if (valor.length === 0) {
-                erros.push({
-                    campo,
-                    tipo: tiposDeErros[2] 
-                });
+                throw new InvalidField(campo, 2);
+            } else if (typeof valor !== 'string' || (campo === 'categoria' && !(valor === 'ração' || valor === 'brinquedo'))) {
+                throw new InvalidField(campo, 1);
             }
         });
-
-        if (erros.length > 0) {
-            throw new Error(JSON.stringify(erros));
-        }
     }
 
 }
