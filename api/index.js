@@ -13,9 +13,6 @@ app.use(express.json());
 // middleware content-type
 app.use((req, res, next) => {
     const formatoRequisitado = req.headers.accept === '*/*' ? 'application/json' : req.headers.accept;
-    console.log(formatoRequisitado);
-
-    
 
     if (acceptedTypes.indexOf(formatoRequisitado) === -1) return res.status(406).end();
 

@@ -1,6 +1,7 @@
 const Router = require('express').Router();
 const table = require('./table');
 const Fornecedor = require('./fornecedor');
+const { SerializadorFornecedor } = require('../../Serializador');
 
 Router.post('/', async (req, res, next) => {
     
@@ -11,7 +12,8 @@ Router.post('/', async (req, res, next) => {
         await fornecedor.create();
 
         res.status(201);
-        res.send(JSON.stringify(fornecedor));
+        const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'));
+        res.send(serializador.serializar(fornecedor));
     } catch(err) {
         next(err);
     }
@@ -22,7 +24,8 @@ Router.get('/', async (req, res) => {
     const resultados = await table.read();
 
     res.status(200);
-    res.send(JSON.stringify(resultados));
+    const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'));
+    res.send(serializador.serializar(resultados));
 });
 
 Router.get('/:idFornecedor', async (req, res, next) => {
@@ -33,7 +36,8 @@ Router.get('/:idFornecedor', async (req, res, next) => {
         await fornecedor.searchForID();
 
         res.status(200);
-        res.send(JSON.stringify(fornecedor));
+        const serializador = new SerializadorFornecedor(res.getHeader('Content-Type'));
+        res.send(serializador.serializar(fornecedor));
     } catch(err) {
         next(err);
     }
