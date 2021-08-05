@@ -5,9 +5,23 @@ const NotFound = require('./erros/NotFound');
 const InvalidField = require('./erros/InvalidField');
 const NotFoundData = require('./erros/NotFoundData');
 const NotSupportedType = require('./erros/NotSupportedType');
+const { acceptedTypes } = require('./Serializador');
 
 const app = express();
 app.use(express.json());
+
+// middleware content-type
+app.use((req, res, next) => {
+    const formatoRequisitado = req.headers.accept === '*/*' ? 'application/json' : req.headers.accept;
+    console.log(formatoRequisitado);
+
+    
+
+    if (acceptedTypes.indexOf(formatoRequisitado) === -1) return res.status(406).end();
+
+    res.setHeader('Content-Type', formatoRequisitado);
+    next();
+});
 
 app.use('/api/fornecedores', Router);
 
