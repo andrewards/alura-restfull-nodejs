@@ -1,3 +1,4 @@
+const jsontoxml = require('jsontoxml');
 const NotSupportedType = require('./erros/NotSupportedType');
 
 class Serializador {
@@ -6,9 +7,29 @@ class Serializador {
         return JSON.stringify(data);
     }
 
+    xml(data) {
+        let tag = this.tagSingular;
+
+        if (Array.isArray(data)) {
+            tag = this.tagPlural;
+            data = data.map(item => {
+                return {
+                    [this.tagSingular]: item,
+                };
+            });
+        }
+        return jsontoxml({
+            [tag]: data,
+        });
+    }
+
     serializar(data) {
+        data = this.filter(data);
+
         if (this.contentType === 'application/json') {
-            return this.json(this.filter(data));
+            return this.json(data);
+        } else if (this.contentType === 'application/xml') {
+            return this.xml(data);
         }
 
         throw new NotSupportedType(this.contentType);
@@ -40,6 +61,8 @@ class SerializadorFornecedor extends Serializador {
     constructor(contentType, extraTypes=[]) {
         super();
         this.contentType = contentType;
+        this.tagSingular = 'fornecedor';
+        this.tagPlural = 'fornecedores';
         this.publicData = [
             'id',
             'empresa',
@@ -53,6 +76,8 @@ class SerializadorErro extends Serializador {
     constructor(contentType, extraTypes=[]) {
         super();
         this.contentType = contentType;
+        this.tagSingular = 'erro';
+        this.tagPlural = 'erros';
         this.publicData = [
             'error',
             'code',
@@ -66,5 +91,6 @@ module.exports = {
     SerializadorErro,
     acceptedTypes: [
         'application/json',
+        'application/xml',
     ],
 };
