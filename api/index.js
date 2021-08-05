@@ -4,6 +4,7 @@ const Router = require('./routes/fornecedores');
 const NotFound = require('./erros/NotFound');
 const InvalidField = require('./erros/InvalidField');
 const NotFoundData = require('./erros/NotFoundData');
+const NotSupportedType = require('./erros/NotSupportedType');
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,8 @@ app.use((err, req, res, next) => {
     } else if (err instanceof InvalidField
         || err instanceof NotFoundData) {
         status = 400;
+    } else if (err instanceof NotSupportedType) {
+        status = 406;
     }
 
     res.status(status);
