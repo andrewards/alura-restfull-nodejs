@@ -37,20 +37,33 @@ class Serializador {
 
 class SerializadorFornecedor extends Serializador {
 
-    constructor(contentType) {
+    constructor(contentType, extraTypes=[]) {
         super();
         this.contentType = contentType;
         this.publicData = [
             'id',
             'empresa',
             'categoria'
-        ];
+        ].concat(extraTypes);
+    }
+}
+
+class SerializadorErro extends Serializador {
+    
+    constructor(contentType, extraTypes=[]) {
+        super();
+        this.contentType = contentType;
+        this.publicData = [
+            'error',
+            'code',
+        ].concat(extraTypes);
     }
 }
 
 module.exports = {
     Serializador,
     SerializadorFornecedor,
+    SerializadorErro,
     acceptedTypes: [
         'application/json',
     ],

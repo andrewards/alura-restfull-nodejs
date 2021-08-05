@@ -5,7 +5,7 @@ const NotFound = require('./erros/NotFound');
 const InvalidField = require('./erros/InvalidField');
 const NotFoundData = require('./erros/NotFoundData');
 const NotSupportedType = require('./erros/NotSupportedType');
-const { acceptedTypes } = require('./Serializador');
+const { acceptedTypes, SerializadorErro } = require('./Serializador');
 
 const app = express();
 app.use(express.json());
@@ -34,10 +34,11 @@ app.use((err, req, res, next) => {
         status = 406;
     }
 
+    const serializador = new SerializadorErro(res.getHeader('Content-Type'));
     res.status(status);
 
-    res.send(JSON.stringify({
-        erro: err.message,
+    res.send(serializador.serializar({
+        error: err.message,
         code: err.idErro,
     }));
     
