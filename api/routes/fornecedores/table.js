@@ -6,7 +6,7 @@ module.exports = {
         return modelTable.create(fornecedor);
     },
     read() {
-        return modelTable.findAll();
+        return modelTable.findAll({ raw: true });
     },
     async searchForID(id) {
         const encontrado = await modelTable.findOne({
