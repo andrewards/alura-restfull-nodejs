@@ -4,6 +4,14 @@ const { SerializadorProduto } = require('../../../Serializador');
 
 const Produto = require('./produto');
 
+Router.options('/', (req, res) => {
+    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    res.status(204);
+    res.end();
+});
+
 Router.get('/', async (req, res) => {
     const fornecedor = req.fornecedor.id;
     const produtos = await table.read(fornecedor);
@@ -38,6 +46,14 @@ Router.post('/', async (req, res, next) => {
     } catch(err) {
         next(err);
     }
+});
+
+Router.options('/:idProduto', (req, res) => {
+    res.set('Access-Control-Allow-Methods', 'GET, HEAD, PATCH, DELETE');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    res.status(204);
+    res.end();
 });
 
 Router.delete('/:idProduto', async (req, res) => {
@@ -137,6 +153,14 @@ Router.patch('/:idProduto', async (req, res, next) => {
     } catch(err) {
         next(err);
     }
+});
+
+Router.options('/:idProduto/diminuir-estoque', (req, res) => {
+    res.set('Access-Control-Allow-Methods', 'PATCH');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+    res.status(204);
+    res.end();
 });
 
 Router.patch('/:idProduto/diminuir-estoque', async (req, res, next) => {
