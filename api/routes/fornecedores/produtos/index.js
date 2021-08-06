@@ -84,6 +84,28 @@ Router.get('/:idProduto', async (req, res, next) => {
     }
 });
 
+Router.head('/:idProduto', async (req, res, next) => {
+    try {
+
+        const data = {
+            id: req.params.idProduto,
+            fornecedor: req.fornecedor.id,
+        };
+    
+        const produto = new Produto(data);
+        await produto.searchForID();
+
+        res.set('ETag', produto.versao);
+        const updateTime = (new Date(produto.dataAtualizacao)).getTime();
+        res.set('Last-Modified', updateTime);
+
+        res.status(200);
+        res.end();
+    } catch(err) {
+        next(err);
+    }
+});
+
 Router.patch('/:idProduto', async (req, res, next) => {
     
     try {

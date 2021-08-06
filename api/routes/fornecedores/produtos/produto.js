@@ -1,4 +1,5 @@
 const NotFoundData = require('../../../erros/NotFoundData');
+const InvalidField = require('../../../erros/InvalidField');
 const table = require('./table');
 
 class Produto {
@@ -90,14 +91,13 @@ class Produto {
     }
 
     validar() {
-        if (typeof this.titulo !== 'string'
-            || this.titulo.length === 0) {
-            throw new Error('Campo titulo inválido!');
-        }
-        if (typeof this.preco !== 'number'
-            || this.preco <= 0) {
-            throw new Error('Campo preco inválido!');
-        }
+        if (this.titulo === undefined) throw new InvalidField('titulo', 0);
+        else if (typeof this.titulo !== 'string') throw new InvalidField('titulo', 1);
+        else if (this.titulo.length === 0) throw new InvalidField('titulo', 2);
+
+        if (this.preco === undefined) throw new InvalidField('preco', 0);
+        else if (typeof this.preco !== 'number'
+        || this.preco <= 0) throw new InvalidField('preco', 1);
     }
 }
 
