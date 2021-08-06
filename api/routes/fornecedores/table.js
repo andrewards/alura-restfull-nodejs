@@ -1,4 +1,4 @@
-const modelTable = require('./modelTabel');
+const modelTable = require('./modelTable');
 const NotFound = require('../../erros/NotFound');
 
 module.exports = {
