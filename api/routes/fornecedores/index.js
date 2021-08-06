@@ -1,7 +1,7 @@
 const Router = require('express').Router();
 const table = require('./table');
 const Fornecedor = require('./fornecedor');
-const { SerializadorFornecedor } = require('../../Serializador');
+const { SerializadorFornecedor, Serializador, SerializadorProduto } = require('../../Serializador');
 
 Router.post('/', async (req, res, next) => {
     
@@ -62,6 +62,26 @@ Router.patch('/:idFornecedor', async (req, res, next) => {
 
         res.status(204);
         res.end();
+    } catch(err) {
+        next(err);
+    }
+});
+
+Router.patch('/:idFornecedor/calcular-reposicao-de-estoque', async (req, res, next) => {
+    try {
+
+        const id = req.params.idFornecedor;
+        const fornecedor = new Fornecedor({ id });
+        const results = await fornecedor.calcularReposicaoDeEstoque();
+
+        const serializador = new Serializador(res.getHeader('Content-Type'), ['qtd', 'produtosZerados'], [], 'produtosZerados');
+        const serializadorProduto = new SerializadorProduto(res.getHeader('Content-Type'));
+
+        res.send(serializador.serializar({
+            qtd: results.length,
+            produtosZerados: serializadorProduto.serializar(results),
+        }));
+
     } catch(err) {
         next(err);
     }

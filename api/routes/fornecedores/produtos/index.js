@@ -102,4 +102,24 @@ Router.patch('/:idProduto', async (req, res, next) => {
     }
 });
 
+Router.patch('/:idProduto/diminuir-estoque', async (req, res, next) => {
+    
+    try {
+        
+        const produto = new Produto({
+            id: req.params.idProduto,
+            fornecedor: req.fornecedor.id,
+        });
+    
+        await produto.searchForID();
+        produto.sell(req.body.quantidade);
+
+        res.status(204);
+        res.end();
+    } catch(err) {
+        next(err);
+    }
+
+});
+
 module.exports = Router;

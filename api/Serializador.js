@@ -3,6 +3,13 @@ const NotSupportedType = require('./erros/NotSupportedType');
 
 class Serializador {
 
+    constructor(contentType, publicData, extraTypes=[], tagS, tagP=undefined) {
+        this.contentType = contentType;
+        this.publicData = publicData.concat(extraTypes);
+        this.tagSingular = tagS;
+        this.tagPlural = tagP;
+    }
+
     json(data) {
         return JSON.stringify(data);
     }
@@ -59,43 +66,31 @@ class Serializador {
 class SerializadorFornecedor extends Serializador {
 
     constructor(contentType, extraTypes=[]) {
-        super();
-        this.contentType = contentType;
-        this.tagSingular = 'fornecedor';
-        this.tagPlural = 'fornecedores';
-        this.publicData = [
+        super(contentType, [
             'id',
             'empresa',
-            'categoria'
-        ].concat(extraTypes);
+            'categoria',
+        ], extraTypes, 'fornecedor', 'fornecedores');
     }
 }
 
 class SerializadorProduto extends Serializador {
 
     constructor(contentType, extraTypes=[]) {
-        super();
-        this.contentType = contentType;
-        this.tagSingular = 'produto';
-        this.tagPlural = 'produtos';
-        this.publicData = [
+        super(contentType, [
             'id',
             'titulo',
-        ].concat(extraTypes);
+        ], extraTypes, 'produto', 'produtos');
     }
 }
 
 class SerializadorErro extends Serializador {
     
     constructor(contentType, extraTypes=[]) {
-        super();
-        this.contentType = contentType;
-        this.tagSingular = 'erro';
-        this.tagPlural = 'erros';
-        this.publicData = [
+        super(contentType, [
             'error',
             'code',
-        ].concat(extraTypes);
+        ], extraTypes, 'erro', 'erros');   
     }
 }
 

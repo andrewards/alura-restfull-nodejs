@@ -1,13 +1,15 @@
 const NotFound = require('../../../erros/NotFound');
 const modelTable = require('./modelTable');
+const instancia = require('../../../db');
 
 module.exports = {
     create(data) {
         return modelTable.create(data);
     },
-    read(fornecedor) {
+    read(fornecedor, criterios={}) {
+        criterios.fornecedor = fornecedor;
         return modelTable.findAll({
-            where: { fornecedor },
+            where: criterios,
             raw: true,
         });
     },
@@ -29,6 +31,15 @@ module.exports = {
     update(data, updateData) {
         return modelTable.update(updateData, {
             where: data,
+        });
+    },
+    sell(where, estoque) {
+        return instancia.transaction(async transacao => {
+            const produto = await modelTable.findOne({ where });
+
+            produto.estoque = estoque;
+            await produto.save();
+            return produto;
         });
     },
     delete(id, fornecedor) {

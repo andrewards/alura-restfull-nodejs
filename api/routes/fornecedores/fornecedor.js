@@ -1,6 +1,7 @@
 const table = require('./table');
 const InvalidField = require('../../erros/InvalidField');
 const NotFoundData = require('../../erros/NotFoundData');
+const tableProdutos = require('./produtos/table');
 
 class Fornecedor {
 
@@ -70,6 +71,10 @@ class Fornecedor {
     async delete() {
         await table.searchForID(this.id);
         await table.delete(this.id);
+    }
+
+    calcularReposicaoDeEstoque() {
+        return tableProdutos.read(this.id, { estoque: 0 });
     }
 
     async validar() {

@@ -80,6 +80,15 @@ class Produto {
         }, updateData);
     }
 
+    sell(qtd) {
+        this.estoque -= qtd;
+
+        return table.sell({
+            id: this.id,
+            fornecedor: this.fornecedor
+        }, this.estoque);
+    }
+
     validar() {
         if (typeof this.titulo !== 'string'
             || this.titulo.length === 0) {
