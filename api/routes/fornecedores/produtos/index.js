@@ -28,6 +28,11 @@ Router.post('/', async (req, res, next) => {
 
         const serializador = new SerializadorProduto(res.getHeader('Content-Type'));
 
+        res.set('ETag', produto.versao);
+        const updateTime = (new Date(produto.dataAtualizacao)).getTime();
+        res.set('Last-Modified', updateTime);
+        res.set('Location', `/api/fornecedores/${produto.fornecedor}/produtos/${produto.id}`);
+
         res.status(201);
         res.send(serializador.serializar(produto));
     } catch(err) {
@@ -68,6 +73,11 @@ Router.get('/:idProduto', async (req, res, next) => {
             'dataAtualizacao',
             'versao',
         ]);
+
+        res.set('ETag', produto.versao);
+        const updateTime = (new Date(produto.dataAtualizacao)).getTime();
+        res.set('Last-Modified', updateTime);
+
         res.send(serializador.serializar(produto));
     } catch(err) {
         next(err);
@@ -95,6 +105,11 @@ Router.patch('/:idProduto', async (req, res, next) => {
         const produto = new Produto(data);
         produto.update();
 
+        await produto.searchForID();
+        res.set('ETag', produto.versao);
+        const updateTime = (new Date(produto.dataAtualizacao)).getTime();
+        res.set('Last-Modified', updateTime);
+
         res.status(204);
         res.end();
     } catch(err) {
@@ -113,6 +128,11 @@ Router.patch('/:idProduto/diminuir-estoque', async (req, res, next) => {
     
         await produto.searchForID();
         produto.sell(req.body.quantidade);
+
+        await produto.searchForID();
+        res.set('ETag', produto.versao);
+        const updateTime = (new Date(produto.dataAtualizacao)).getTime();
+        res.set('Last-Modified', updateTime);
 
         res.status(204);
         res.end();
