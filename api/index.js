@@ -10,6 +10,12 @@ const { acceptedTypes, SerializadorErro } = require('./Serializador');
 const app = express();
 app.use(express.json());
 
+// middleware cors
+app.use((req, res, next) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 // middleware powered by
 app.use((req, res, next) => {
     res.setHeader('X-Powered-By', 'Gatito Petshop');
