@@ -7,7 +7,8 @@ module.exports = {
     },
     read(fornecedor) {
         return modelTable.findAll({
-            where: { fornecedor }
+            where: { fornecedor },
+            raw: true,
         });
     },
     async searchForID(id, fornecedor) {

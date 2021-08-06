@@ -1,12 +1,15 @@
 const Router = require('express').Router({ mergeParams: true });
 const table = require('./table');
+const { SerializadorProduto } = require('../../../Serializador');
 
 const Produto = require('./produto');
 
 Router.get('/', async (req, res) => {
     const fornecedor = req.fornecedor.id;
     const produtos = await table.read(fornecedor);
-    res.send(JSON.stringify(produtos));
+
+    const serializador = new SerializadorProduto(res.getHeader('Content-Type'));
+    res.send(serializador.serializar(produtos));
 });
 
 Router.post('/', async (req, res, next) => {
@@ -23,8 +26,10 @@ Router.post('/', async (req, res, next) => {
         const produto = new Produto(data);
         await produto.create();
 
+        const serializador = new SerializadorProduto(res.getHeader('Content-Type'));
+
         res.status(201);
-        res.send(produto);
+        res.send(serializador.serializar(produto));
     } catch(err) {
         next(err);
     }
@@ -55,7 +60,15 @@ Router.get('/:idProduto', async (req, res, next) => {
         const produto = new Produto(data);
         await produto.searchForID();
     
-        res.send(JSON.stringify(produto));
+        const serializador = new SerializadorProduto(res.getHeader('Content-Type'), [
+            'preco',
+            'estoque',
+            'fornecedor',
+            'dataCriacao',
+            'dataAtualizacao',
+            'versao',
+        ]);
+        res.send(serializador.serializar(produto));
     } catch(err) {
         next(err);
     }

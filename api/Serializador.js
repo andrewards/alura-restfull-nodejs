@@ -71,6 +71,20 @@ class SerializadorFornecedor extends Serializador {
     }
 }
 
+class SerializadorProduto extends Serializador {
+
+    constructor(contentType, extraTypes=[]) {
+        super();
+        this.contentType = contentType;
+        this.tagSingular = 'produto';
+        this.tagPlural = 'produtos';
+        this.publicData = [
+            'id',
+            'titulo',
+        ].concat(extraTypes);
+    }
+}
+
 class SerializadorErro extends Serializador {
     
     constructor(contentType, extraTypes=[]) {
@@ -88,6 +102,7 @@ class SerializadorErro extends Serializador {
 module.exports = {
     Serializador,
     SerializadorFornecedor,
+    SerializadorProduto,
     SerializadorErro,
     acceptedTypes: [
         'application/json',
