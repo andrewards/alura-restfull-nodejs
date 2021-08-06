@@ -83,4 +83,7 @@ Router.delete('/:idFornecedor', async (req, res, next) => {
     
 });
 
+const RouterProducts = require('./produtos');
+Router.use('/:idFornecedor/produtos', RouterProducts);
+
 module.exports = Router;
