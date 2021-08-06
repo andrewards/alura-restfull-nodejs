@@ -4,14 +4,14 @@ const table = require('./table');
 const Produto = require('./produto');
 
 Router.get('/', async (req, res) => {
-    const fornecedor = req.params.idFornecedor;
+    const fornecedor = req.fornecedor.id;
     const produtos = await table.read(fornecedor);
     res.send(JSON.stringify(produtos));
 });
 
 Router.post('/', async (req, res, next) => {
     try {
-        const fornecedor = req.params.idFornecedor;
+        const fornecedor = req.fornecedor.id;
         const body = req.body;
     
         // const data = Object.assign({}, body, { fornecedor });
@@ -33,7 +33,7 @@ Router.post('/', async (req, res, next) => {
 Router.delete('/:idProduto', async (req, res) => {
     const data = {
         id: req.params.idProduto,
-        fornecedor: req.params.idFornecedor,
+        fornecedor: req.fornecedor.id,
     };
 
     const produto = new Produto(data);
@@ -41,6 +41,24 @@ Router.delete('/:idProduto', async (req, res) => {
 
     res.status(204);
     res.end();
+});
+
+Router.get('/:idProduto', async (req, res, next) => {
+    
+    try {
+
+        const data = {
+            id: req.params.idProduto,
+            fornecedor: req.fornecedor.id,
+        };
+    
+        const produto = new Produto(data);
+        await produto.searchForID();
+    
+        res.send(JSON.stringify(produto));
+    } catch(err) {
+        next(err);
+    }
 });
 
 module.exports = Router;

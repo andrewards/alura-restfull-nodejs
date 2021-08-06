@@ -84,6 +84,18 @@ Router.delete('/:idFornecedor', async (req, res, next) => {
 });
 
 const RouterProducts = require('./produtos');
-Router.use('/:idFornecedor/produtos', RouterProducts);
+
+const middlewareVerificarFornecedor = async (req, res, next) => {
+    try {
+        const id = req.params.idFornecedor;
+        const fornecedor = new Fornecedor({ id });
+        await fornecedor.searchForID();
+        req.fornecedor = fornecedor;
+        next();
+    } catch(err) {
+        next(err);
+    }
+};
+Router.use('/:idFornecedor/produtos', middlewareVerificarFornecedor, RouterProducts);
 
 module.exports = Router;

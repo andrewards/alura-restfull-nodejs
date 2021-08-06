@@ -41,6 +41,16 @@ class Produto {
         return table.delete(this.id, this.fornecedor);
     }
 
+    async searchForID() {
+        const produto = await table.searchForID(this.id, this.fornecedor);
+        this.titulo = produto.titulo;
+        this.preco = produto.preco;
+        this.estoque = produto.estoque;
+        this.dataCriacao = produto.dataCriacao;
+        this.dataAtualizacao = produto.dataAtualizacao;
+        this.versao = produto.versao;
+    }
+
     validar() {
         if (typeof this.titulo !== 'string'
             || this.titulo.length === 0) {
