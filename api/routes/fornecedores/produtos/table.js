@@ -26,6 +26,11 @@ module.exports = {
 
         return encontrado;
     },
+    update(data, updateData) {
+        return modelTable.update(updateData, {
+            where: data,
+        });
+    },
     delete(id, fornecedor) {
         return modelTable.destroy({
             where: {

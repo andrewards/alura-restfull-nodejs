@@ -42,7 +42,7 @@ Router.delete('/:idProduto', async (req, res) => {
     };
 
     const produto = new Produto(data);
-    await produto.delete();
+    produto.delete();
 
     res.status(204);
     res.end();
@@ -69,6 +69,34 @@ Router.get('/:idProduto', async (req, res, next) => {
             'versao',
         ]);
         res.send(serializador.serializar(produto));
+    } catch(err) {
+        next(err);
+    }
+});
+
+Router.patch('/:idProduto', async (req, res, next) => {
+    
+    try {
+        
+        // const data = Object.assign(
+        //     {},
+        //     req.body,
+        //     {
+        //         id: req.params.idProduto,
+        //         fornecedor: req.fornecedor.id,    
+        //     }
+        // );
+        const data = {
+            id: req.params.idProduto,
+            fornecedor: req.fornecedor.id,
+            ...req.body,
+        };
+
+        const produto = new Produto(data);
+        produto.update();
+
+        res.status(204);
+        res.end();
     } catch(err) {
         next(err);
     }

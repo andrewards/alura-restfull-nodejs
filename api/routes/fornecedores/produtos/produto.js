@@ -1,3 +1,4 @@
+const NotFoundData = require('../../../erros/NotFoundData');
 const table = require('./table');
 
 class Produto {
@@ -37,7 +38,7 @@ class Produto {
         this.versao = result.versao;
     }
 
-    async delete() {
+    delete() {
         return table.delete(this.id, this.fornecedor);
     }
 
@@ -49,6 +50,34 @@ class Produto {
         this.dataCriacao = produto.dataCriacao;
         this.dataAtualizacao = produto.dataAtualizacao;
         this.versao = produto.versao;
+    }
+
+    async update() {
+        const updateData = {};
+
+        if (typeof this.titulo === 'string'
+            && this.titulo.length > 0) {
+            updateData.titulo = this.titulo;
+        }
+
+        if (typeof this.preco === 'number'
+            && this.preco > 0) {
+            updateData.preco = this.preco;
+        }
+
+        if (typeof this.estoque === 'number'
+            && this.estoque >= 0) {
+            updateData.estoque = this.estoque;
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            throw new NotFoundData();
+        }
+
+        return table.update({
+            id: this.id,
+            fornecedor: this.fornecedor,
+        }, updateData);
     }
 
     validar() {
