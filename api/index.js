@@ -10,6 +10,12 @@ const { acceptedTypes, SerializadorErro } = require('./Serializador');
 const app = express();
 app.use(express.json());
 
+// middleware powered by
+app.use((req, res, next) => {
+    res.setHeader('X-Powered-By', 'Gatito Petshop');
+    next();
+});
+
 // middleware content-type
 app.use((req, res, next) => {
     const formatoRequisitado = req.headers.accept === '*/*' ? 'application/json' : req.headers.accept;
@@ -20,8 +26,10 @@ app.use((req, res, next) => {
     next();
 });
 
+// collection Fornecedores
 app.use('/api/fornecedores', Router);
 
+// middleware errors
 app.use((err, req, res, next) => {
 
     let status = 500;
