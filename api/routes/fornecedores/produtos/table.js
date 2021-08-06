@@ -9,4 +9,12 @@ module.exports = {
             where: { fornecedor }
         });
     },
+    delete(id, fornecedor) {
+        return modelTable.destroy({
+            where: {
+                id,
+                fornecedor,
+            }
+        });
+    },
 };

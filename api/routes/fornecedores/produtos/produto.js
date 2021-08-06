@@ -23,6 +23,7 @@ class Produto {
     }
 
     async create() {
+        this.validar();
         const result = await table.create({
             titulo: this.titulo,
             preco: this.preco,
@@ -34,6 +35,21 @@ class Produto {
         this.dataCriacao = result.dataCriacao;
         this.dataAtualizacao = result.dataAtualizacao;
         this.versao = result.versao;
+    }
+
+    async delete() {
+        return table.delete(this.id, this.fornecedor);
+    }
+
+    validar() {
+        if (typeof this.titulo !== 'string'
+            || this.titulo.length === 0) {
+            throw new Error('Campo titulo inválido!');
+        }
+        if (typeof this.preco !== 'number'
+            || this.preco <= 0) {
+            throw new Error('Campo preco inválido!');
+        }
     }
 }
 
