@@ -68,7 +68,6 @@ class SerializadorFornecedor extends Serializador {
     constructor(contentType, extraTypes=[]) {
         super(contentType, [
             'id',
-            'empresa',
             'categoria',
         ], extraTypes, 'fornecedor', 'fornecedores');
     }

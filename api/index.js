@@ -35,6 +35,9 @@ app.use((req, res, next) => {
 // collection Fornecedores
 app.use('/api/fornecedores', Router);
 
+const RouterV2 = require('./routes/fornecedores/routes.v2');
+app.use('/api/v2/fornecedores', RouterV2);
+
 // middleware errors
 app.use((err, req, res, next) => {
 
